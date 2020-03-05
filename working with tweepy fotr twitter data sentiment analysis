@@ -1,0 +1,112 @@
+import os
+import tweepy as tw
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import itertools
+import collections
+import nltk
+from nltk.corpus import stopwords
+import re
+import networkx
+import warnings
+warnings.filterwarnings("ignore")
+sns.set(font_scale=1.5)
+sns.set_style("whitegrid")
+
+consumer_key = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+consumer_secret = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+access_key= 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+access_secret = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+#pass twitter credentials to tweepy
+auth = tw.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_key, access_secret)
+api = tw.API(auth, wait_on_rate_limit = True)
+
+#%% send a tweet
+'''
+api.update_status("Look, I'm tweeting from python and posting on my timeline")
+#tweet posted
+'''
+#%% search twitter for tweets
+# you cannot dig into history too far due to twitter restrictions
+search_words = "coronavirus"
+date_since = "2020-02-20"
+#collect tweets
+tweets = tw.Cursor(api.search, q = search_words,lang = "en",
+                   since = date_since).items(5)
+#collect a list of tweets
+[tweet.text for tweet in tweets]
+#%%
+#filtering retweets
+new_search = search_words + "-filter:retweets"
+tweets = tw.Cursor(api.search, q = new_search,lang = "en",
+                   since = date_since).items(5)
+#collect a list of tweets
+[tweet.text for tweet in tweets]
+#%% user location and username
+tweets = tw.Cursor(api.search, q = search_words,lang = "en",
+                   since = date_since).items(10)
+users_locs = [[tweet.user.screen_name,tweet.user.location]for tweet in tweets]
+users_locs
+#%% creating a dataframe from a list of tweet data
+tweet_text = pd.DataFrame(users_locs,
+                          columns =['user',"location"])
+tweet_text
+#%%customizing twitter queries
+new_search = search_words + "-filter:retweets"
+tweets = tw.Cursor(api.search, q = new_search,lang = "en",
+                   since = date_since).items(100)
+#collect a list of tweets
+all_tweets = [tweet.text for tweet in tweets]
+all_tweets[:5]
+#%% removing urls
+def remove_url(text):
+    '''replace urls found in a string with nothing
+    parameters
+    ----------
+    text: string
+        the text string to be parsed to remove url
+    Return
+    ---------
+    same text with urls removed
+    '''
+    return " ".join(re.sub("([^0-9A-Za-z \t])|(\w+:\/\/\S+)", "",text).split())
+    
+all_tweets_no_urls = [remove_url(tweet) for tweet in all_tweets]
+all_tweets_no_urls[:5]
+#%% Text Cleanup
+#removing capitalization
+ex_list = ["dog","dog","cat","Cat","cat","Dog"]
+#get unique elements in the list
+set(ex_list)
+#%%make all elements in the list lower case
+word_list = ["dog","dog","cat","Cat","cat","Dog"]
+lower_case = [word.lower()for word in word_list]
+lower_case
+set(lower_case)
+#%%split the words from one tweet into unique element
+all_tweets_no_urls[0].lower().split()
+#%% to split and lowercase words in all of the tweets
+words_in_tweets = [tweet.lower().split() for tweet in all_tweets_no_urls]
+words_in_tweets[:2]
+#%% calculate and plot word frequency
+#List of all words across tweets.....flatten the list
+all_words_no_urls = list(itertools.chain(*words_in_tweets))
+#create counter
+counts_no_urls = collections.Counter(all_words_no_urls)
+counts_no_urls.most_common(15)
+#%%plot word frequency
+clean_tweets_no_urls = pd.DataFrame(counts_no_urls.most_common(15),
+                                    columns =['words','count'])
+clean_tweets_no_urls.head()
+#%% create a horizontal bar graph
+fig, ax = plt.subplots(figsize=(8,8))
+#plot horizontal bar chart
+clean_tweets_no_urls.sort_values(by ='count').plot.barh(x='words',
+                                y = 'count', ax = ax,
+                                color = 'purple')
+ax.set_title('common words found in tweets (Including all words)')
+plt.show
+#%%
