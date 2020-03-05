@@ -1,0 +1,308 @@
+clear;
+clc;
+gamma = 0.2;
+eta = 0.5;
+%initialize belief over all states and agents
+%total number of agents is 3 and total number of states is 5
+mu_init_agent1_state1 = 1/5;
+mu_init_agent1_state2 = 1/5;
+mu_init_agent1_state3 = 1/5;
+mu_init_agent1_state4 = 1/5;
+mu_init_agent1_state5 = 1/5;
+
+%for agent 2
+mu_init_agent2_state1 = 1/5;
+mu_init_agent2_state2 = 1/5;
+mu_init_agent2_state3 = 1/5;
+mu_init_agent2_state4 = 1/5;
+mu_init_agent2_state5 = 1/5;
+
+
+%for agent 3
+mu_init_agent3_state1 = 1/5;
+mu_init_agent3_state2 = 1/5;
+mu_init_agent3_state3 = 1/5;
+mu_init_agent3_state4 = 1/5;
+mu_init_agent3_state5 = 1/5;
+
+theta_true = randi(5);
+priv_sig = normrnd(theta_true,1);
+
+%likelihood of agents
+%agent 1
+var_agent1_1 = randi(5);
+var_agent1_2 = randi(5);
+var_agent1_3 = rand(5);
+var_agent1_4 = rand(5);
+var_agent1_5 = rand(5);
+like_agent1_state1 = (1/sqrt(2*pi*var1_agent_1))*exp((-(priv_sig-1)^2)/2*var1_agent_1);
+like_agent1_state2 = (1/sqrt(2*pi*var1_agent_2))*exp((-(priv_sig-1)^2)/2*var1_agent_2);
+like_agent1_state3 = (1/sqrt(2*pi*var1_agent_3))*exp((-(priv_sig-1)^2)/2*var1_agent_3);
+like_agent1_state4 = (1/sqrt(2*pi*var1_agent_4))*exp((-(priv_sig-1)^2)/2*var1_agent_4);
+like_agent1_state5 = (1/sqrt(2*pi*var1_agent_5))*exp((-(priv_sig-1)^2)/2*var1_agent_5);
+
+%agent 2
+var_agent2_1 = randi(5);
+var_agent2_2 = randi(5);
+var_agent2_3 = rand(5);
+var_agent2_4 = rand(5);
+var_agent2_5 = rand(5);
+like_agent2_state1 = (1/sqrt(2*pi*var2_agent_1))*exp((-(priv_sig-1)^2)/2*var2_agent_1);
+like_agent2_state2 = (1/sqrt(2*pi*var2_agent_2))*exp((-(priv_sig-1)^2)/2*var2_agent_2);
+like_agent2_state3 = (1/sqrt(2*pi*var2_agent_3))*exp((-(priv_sig-1)^2)/2*var2_agent_3);
+like_agent2_state4 = (1/sqrt(2*pi*var2_agent_4))*exp((-(priv_sig-1)^2)/2*var2_agent_4);
+like_agent2_state5 = (1/sqrt(2*pi*var2_agent_5))*exp((-(priv_sig-1)^2)/2*var2_agent_5);
+
+%agent 3
+var_agent3_1 = randi(5);
+var_agent3_2 = randi(5);
+var_agent3_3 = rand(5);
+var_agent3_4 = rand(5);
+var_agent3_5 = rand(5);
+like_agent3_state1 = (1/sqrt(2*pi*var3_agent_1))*exp((-(priv_sig-1)^2)/2*var3_agent_1);
+like_agent3_state2 = (1/sqrt(2*pi*var3_agent_2))*exp((-(priv_sig-1)^2)/2*var3_agent_2);
+like_agent3_state3 = (1/sqrt(2*pi*var3_agent_3))*exp((-(priv_sig-1)^2)/2*var3_agent_3);
+like_agent3_state4 = (1/sqrt(2*pi*var3_agent_4))*exp((-(priv_sig-1)^2)/2*var3_agent_4);
+like_agent3_state5 = (1/sqrt(2*pi*var3_agent_5))*exp((-(priv_sig-1)^2)/2*var3_agent_5);
+
+%compute trade-off probability for agent 1 at time 1
+prob_agent1_state1 = ((1-gamma)*mu_init_agent1_state1)+ (gamma *like_agent1_state1);
+prob_agent1_state2 = ((1-gamma)*mu_init_agent1_state2)+ (gamma *like_agent1_state2);
+prob_agent1_state3 = ((1-gamma)*mu_init_agent1_state3)+ (gamma *like_agent1_state3);
+prob_agent1_state4 = ((1-gamma)*mu_init_agent1_state4)+ (gamma *like_agent1_state4);
+prob_agent1_state5 = ((1-gamma)*mu_init_agent1_state5)+ (gamma *like_agent1_state5);
+
+%compute trade-off probability for agent 2 at time 1
+prob_agent2_state1 = ((1-gamma)*mu_init_agent2_state1)+ (gamma *like_agent2_state1);
+prob_agent2_state2 = ((1-gamma)*mu_init_agent2_state2)+ (gamma *like_agent2_state2);
+prob_agent2_state3 = ((1-gamma)*mu_init_agent2_state3)+ (gamma *like_agent2_state3);
+prob_agent2_state4 = ((1-gamma)*mu_init_agent2_state4)+ (gamma *like_agent2_state4);
+prob_agent2_state5 = ((1-gamma)*mu_init_agent2_state5)+ (gamma *like_agent2_state5);
+
+%compute trade-off probability of agent 3 at time 1
+prob_agent3_state1 = ((1-gamma)*mu_init_agent3_state1)+ (gamma *like_agent3_state1);
+prob_agent3_state2 = ((1-gamma)*mu_init_agent3_state2)+ (gamma *like_agent3_state2);
+prob_agent3_state3 = ((1-gamma)*mu_init_agent3_state3)+ (gamma *like_agent3_state3);
+prob_agent3_state4 = ((1-gamma)*mu_init_agent3_state4)+ (gamma *like_agent3_state4);
+prob_agent3_state5 = ((1-gamma)*mu_init_agent3_state5)+ (gamma *like_agent3_state5);
+
+%compute consensus probability of agent 1
+cons_prob_agent1_state1 = 0.2*prob_agent1_state1 + 0.5*prob_agent2_state1 + 0.3*prob_agent3_state1;
+cons_prob_agent1_state2 = 0.2*prob_agent1_state2 + 0.5*prob_agent2_state2 + 0.3*prob_agent3_state2;
+cons_prob_agent1_state3 = 0.2*prob_agent1_state3 + 0.5*prob_agent2_state3 + 0.3*prob_agent3_state3;
+cons_prob_agent1_state4 = 0.2*prob_agent1_state4 + 0.5*prob_agent2_state4 + 0.3*prob_agent3_state4;
+cons_prob_agent1_state5 = 0.2*prob_agent1_state5 + 0.5*prob_agent2_state5 + 0.3*prob_agent3_state5;
+
+%compute consensuss probability of agent 2
+cons_prob_agent2_state1 = 0.2*prob_agent1_state1 + 0.4*prob_agent2_state1 + 0.4*prob_agent3_state1;
+cons_prob_agent2_state2 = 0.2*prob_agent1_state2 + 0.4*prob_agent2_state2 + 0.4*prob_agent3_state2;
+cons_prob_agent2_state3 = 0.2*prob_agent1_state3 + 0.4*prob_agent2_state3 + 0.4*prob_agent3_state3;
+cons_prob_agent2_state4 = 0.2*prob_agent1_state4 + 0.4*prob_agent2_state4 + 0.4*prob_agent3_state4;
+cons_prob_agent2_state5 = 0.2*prob_agent1_state5 + 0.4*prob_agent2_state5 + 0.4*prob_agent3_state5;
+
+%compute consensuss probability of agent 3
+cons_prob_agent3_state1 = 0.8*prob_agent1_state1 + 0.1*prob_agent2_state1 + 0.1*prob_agent3_state1;
+cons_prob_agent3_state2 = 0.8*prob_agent1_state2 + 0.1*prob_agent2_state2 + 0.1*prob_agent3_state2;
+cons_prob_agent3_state3 = 0.8*prob_agent1_state3 + 0.1*prob_agent2_state3 + 0.1*prob_agent3_state3;
+cons_prob_agent3_state4 = 0.8*prob_agent1_state4 + 0.1*prob_agent2_state4 + 0.1*prob_agent3_state4;
+cons_prob_agent3_state5 = 0.8*prob_agent1_state5 + 0.1*prob_agent2_state5 + 0.1*prob_agent3_state5;
+
+%state chosen by agent 1
+Prob_set_agent_1 = [cons_prob_agent1_state1,cons_prob_agent1_state2,cons_prob_agent1_state3,...
+    cons_prob_agent1_state4, cons_prob_agent1_state5];
+agent1_chosen_state = randi(length(prob_set_agent_1));
+agent1_chosen_state_prob = prob_set_agent_1(agent1_chosen_state);
+if agent1_chosen_state == theta_true
+    agent1_loss_chosen_state = 0;
+else
+    agent1_loss_chosen_state = 1;
+end
+
+%state chisen by agent 2
+Prob_set_agent_2 = [cons_prob_agent2_state1,cons_prob_agent2_state2,cons_prob_agent2_state3,...
+    cons_prob_agent2_state4, cons_prob_agent2_state5];
+agent2_chosen_state = randi(length(prob_set_agent_2));
+agent2_chosen_state_prob = prob_set_agent_2(agent2_chosen_state);
+if agent2_chosen_state == theta_true
+    agent2_loss_chosen_state = 0;
+else
+    agent2_loss_chosen_state = 1;
+end
+
+%state chisen by agent 2
+Prob_set_agent_3 = [cons_prob_agent3_state1,cons_prob_agent3_state2,cons_prob_agent3_state3,...
+    cons_prob_agent3_state4, cons_prob_agent3_state5];
+agent3_chosen_state = randi(length(prob_set_agent_3));
+agent3_chosen_state_prob = prob_set_agent_3(agent3_chosen_state);
+if agent3_chosen_state == theta_true
+    agent3_loss_chosen_state = 0;
+else
+    agent3_loss_chosen_state = 1;
+end
+
+%compute fake loss of agent 1 and update belief
+agent1_fakeloss = agent1_loss_chosen_state/agent1_chosen_state_prob;
+if agent1_chosen_state ==1
+    total_belief_agent1_chosen_state1 = ((mu_init_agent1_state1*...
+        exp(-(eta*agent1_fakeloss)))+mu_init_agent1_state2 + mu_init_agent1_state3 +mu_init_agent1_state4+...
+        +mu_init_agent1_state5);
+    agent1_belief_update_theta1 = mu_init_agent1_state1* exp(-(eta*agent1_fakeloss))/...
+        total_belief_agent1_chosen_state1;
+    agent1_belief_update_theta2 = mu_init_agent1_state2/total_belief_agent1_chosen_state1;
+    agent1_belief_update_theta3 = mu_init_agent1_state3/total_belief_agent1_chosen_state1;
+    agent1_belief_update_theta4 = mu_init_agent1_state4/total_belief_agent1_chosen_state1;
+    agent1_belief_update_theta5 = mu_init_agent1_state5/total_belief_agent1_chosen_state1;
+
+elseif agent1_chosen_state == 2
+        total_belief_agent1_chosen_state2 = ((mu_init_agent1_state1)+...
+            (mu_init_agent1_state2*exp(-(eta*agent1_fakeloss))) + mu_init_agent1_state3 +mu_init_agent1_state4+...
+        +mu_init_agent1_state5);
+        agent1_belief_update_theta1 = mu_init_agent1_state1/total_belief_agent1_chosen_state2;
+        agent1_belief_update_theta2 = mu_init_agent1_state2* exp(-(eta*agent1_fakeloss))/...
+            total_belief_agent1_chosen_state2;
+        agent1_belief_update_theta3 = mu_init_agent1_state3/total_belief_agent1_chosen_state2;
+        agent1_belief_update_theta4 = mu_init_agent1_state4/total_belief_agent1_chosen_state2;
+        agent1_belief_update_theta5 = mu_init_agent1_state5/total_belief_agent1_chosen_state2;
+elseif agent1_chosen_state == 3
+        total_belief_agent1_chosen_state3 = mu_init_agent1_state1...
+        +mu_init_agent1_state2 + (mu_init_agent1_state3*exp(-(eta*agent1_fakeloss))) +mu_init_agent1_state4+...
+        +mu_init_agent1_state5;
+        agent1_belief_update_theta1 = mu_init_agent1_state1/total_belief_agent1_chosen_state3;
+        agent1_belief_update_theta2 = mu_init_agent1_state2/total_belief_agent1_chosen_state3;
+        agent1_belief_update_theta3 = mu_init_agent1_state3* exp(-(eta*agent1_fakeloss))/...
+            total_belief_agent1_chosen_state3;
+        agent1_belief_update_theta4 = mu_init_agent1_state4/total_belief_agent1_chosen_state3;
+        agent1_belief_update_theta5 = mu_init_agent1_state5/total_belief_agent1_chosen_state3;
+elseif agent1_chosen_state == 4
+        total_belief_agent1_chosen_state4 = (mu_init_agent1_state1+...
+        mu_init_agent1_state2 + mu_init_agent1_state3 +(mu_init_agent1_state4*exp(-(eta*agent1_fakeloss)))+...
+        +mu_init_agent1_state5);
+        agent1_belief_update_theta1 = mu_init_agent1_state1/total_belief_agent1_chosen_state4;
+        agent1_belief_update_theta2 = mu_init_agent1_state2/total_belief_agent1_chosen_state4;
+        agent1_belief_update_theta3 = mu_init_agent1_state3/total_belief_agent1_chosen_state4;
+        agent1_belief_update_theta4 = mu_init_agent1_state4* exp(-(eta*agent1_fakeloss))/...
+            total_belief_agent1_chosen_state4;
+        agent1_belief_update_theta5 = mu_init_agent1_state5/total_belief_agent1_chosen_state4;
+elseif agent1_chosen_state == 5
+        total_belief_agent1_chosen_state5 = (mu_init_agent1_state1+...
+        mu_init_agent1_state2 + mu_init_agent1_state3 +mu_init_agent1_state4+...
+        +(mu_init_agent1_state5*exp(-(eta*agent1_fakeloss))));
+    agent1_belief_update_theta1 = mu_init_agent1_state1/total_belief_agent1_chosen_state5;
+        agent1_belief_update_theta2 = mu_init_agent1_state2/total_belief_agent1_chosen_state5;
+        agent1_belief_update_theta3 = mu_init_agent1_state3/total_belief_agent1_chosen_state5;
+        agent1_belief_update_theta4 = mu_init_agent1_state4/total_belief_agent1_chosen_state5;
+        agent1_belief_update_theta5 = mu_init_agent1_state5* exp(-(eta*agent1_fakeloss))/...
+            total_belief_agent1_chosen_state5;
+end
+
+%compute fake loss of agent 2 and update belief
+agent2_fakeloss = agent2_loss_chosen_state/agent2_chosen_state_prob;
+if agent2_chosen_state ==1
+    total_belief_agent2_chosen_state1 = ((mu_init_agent2_state1*...
+        exp(-(eta*agent2_fakeloss)))+mu_init_agent2_state2 + mu_init_agent2_state3 +mu_init_agent2_state4+...
+        +mu_init_agent2_state5);
+    agent2_belief_update_theta1 = mu_init_agent2_state1* exp(-(eta*agent2_fakeloss))/...
+        total_belief_agent2_chosen_state1;
+    agent2_belief_update_theta2 = mu_init_agent2_state2/total_belief_agent2_chosen_state1;
+    agent2_belief_update_theta3 = mu_init_agent2_state3/total_belief_agent2_chosen_state1;
+    agent2_belief_update_theta4 = mu_init_agent2_state4/total_belief_agent2_chosen_state1;
+    agent2_belief_update_theta5 = mu_init_agent2_state5/total_belief_agent2_chosen_state1;
+
+elseif agent2_chosen_state == 2
+        total_belief_agent2_chosen_state2 = mu_init_agent2_state1+...
+        (mu_init_agent2_state2*exp(-(eta*agent2_fakeloss))) + mu_init_agent2_state3 +mu_init_agent2_state4+...
+        +mu_init_agent2_state5;
+        agent2_belief_update_theta1 = mu_init_agent2_state1/total_belief_agent2_chosen_state2;
+        agent2_belief_update_theta2 = mu_init_agent2_state2* exp(-(eta*agent2_fakeloss))/...
+            total_belief_agent2_chosen_state2;
+        agent2_belief_update_theta3 = mu_init_agent2_state3/total_belief_agent2_chosen_state2;
+        agent2_belief_update_theta4 = mu_init_agent2_state4/total_belief_agent2_chosen_state2;
+        agent2_belief_update_theta5 = mu_init_agent2_state5/total_belief_agent2_chosen_state2;
+elseif agent2_chosen_state == 3
+        total_belief_agent2_chosen_state3 = mu_init_agent2_state1+...
+        mu_init_agent2_state2 + (mu_init_agent2_state3*exp(-(eta*agent2_fakeloss))) +mu_init_agent2_state4+...
+        +mu_init_agent2_state5;
+        agent2_belief_update_theta1 = mu_init_agent2_state1/ total_belief_agent2_chosen_state3;
+        agent2_belief_update_theta2 = mu_init_agent2_state2/ total_belief_agent2_chosen_state3;
+        agent2_belief_update_theta3 = mu_init_agent2_state3* exp(-(eta*agent2_fakeloss))/...
+             total_belief_agent2_chosen_state3;
+        agent2_belief_update_theta4 = mu_init_agent2_state4/ total_belief_agent2_chosen_state3;
+        agent2_belief_update_theta5 = mu_init_agent2_state5/ total_belief_agent2_chosen_state3;
+elseif agent2_chosen_state == 4
+        total_belief_agent2_chosen_state4 = mu_init_agent2_state1+...
+        +mu_init_agent2_state2 + mu_init_agent2_state3 +(mu_init_agent2_state4*exp(-(eta*agent2_fakeloss)))+...
+        +mu_init_agent2_state5;
+        agent2_belief_update_theta1 = mu_init_agent2_state1/total_belief_agent2_chosen_state4;
+        agent2_belief_update_theta2 = mu_init_agent2_state2/total_belief_agent2_chosen_state4;
+        agent2_belief_update_theta3 = mu_init_agent2_state3/total_belief_agent2_chosen_state4;
+        agent2_belief_update_theta4 = mu_init_agent2_state4* exp(-(eta*agent2_fakeloss))/...
+            total_belief_agent2_chosen_state4;
+        agent2_belief_update_theta5 = mu_init_agent2_state5/total_belief_agent2_chosen_state4;
+elseif agent2_chosen_state == 5
+        total_belief_agent2_chosen_state5 = mu_init_agent2_state1+...
+        +mu_init_agent2_state2 + mu_init_agent2_state3 +mu_init_agent2_state4+...
+        +(mu_init_agent2_state5*exp(-(eta*agent2_fakeloss)));
+        agent2_belief_update_theta1 = mu_init_agent2_state1/total_belief_agent2_chosen_state5;
+        agent2_belief_update_theta2 = mu_init_agent2_state2/total_belief_agent2_chosen_state5;
+        agent2_belief_update_theta3 = mu_init_agent2_state3/total_belief_agent2_chosen_state5;
+        agent2_belief_update_theta4 = mu_init_agent2_state4/total_belief_agent2_chosen_state5;
+        agent2_belief_update_theta5 = mu_init_agent2_state5* exp(-(eta*agent2_fakeloss))/...
+            total_belief_agent2_chosen_state5;
+end
+
+%compute fake loss of agent 3 and update belief
+agent3_fakeloss = agent3_loss_chosen_state/agent2_chosen_state_prob;
+if agent3_chosen_state ==1
+    total_belief_agent3_chosen_state1 = ((mu_init_agent3_state1*...
+        exp(-(eta*agent3_fakeloss)))+mu_init_agent3_state2 + mu_init_agent3_state3 +mu_init_agent3_state4+...
+        +mu_init_agent2_state5);
+    agent3_belief_update_theta1 = mu_init_agent3_state1* exp(-(eta*agent3_fakeloss))/...
+        total_belief_agent3_chosen_state1;
+    agent3_belief_update_theta2 = mu_init_agent3_state2/total_belief_agent3_chosen_state1;
+    agent3_belief_update_theta3 = mu_init_agent3_state3/total_belief_agent3_chosen_state1;
+    agent3_belief_update_theta4 = mu_init_agent3_state4/total_belief_agent3_chosen_state1;
+    agent3_belief_update_theta5 = mu_init_agent3_state5/total_belief_agent3_chosen_state1;
+elseif agent3_chosen_state ==2
+    total_belief_agent3_chosen_state2 = mu_init_agent3_state1+...
+        (mu_init_agent3_state2*exp(-(eta*agent3_fakeloss))) + mu_init_agent3_state3 +mu_init_agent3_state4+...
+        +mu_init_agent2_state5;
+    agent3_belief_update_theta1 = mu_init_agent3_state1/total_belief_agent3_chosen_state2;
+    agent3_belief_update_theta2 = mu_init_agent3_state2* exp(-(eta*agent3_fakeloss))/...
+        total_belief_agent3_chosen_state2;
+    agent3_belief_update_theta3 = mu_init_agent3_state3/total_belief_agent3_chosen_state2;
+    agent3_belief_update_theta4 = mu_init_agent3_state4/total_belief_agent3_chosen_state2;
+    agent3_belief_update_theta5 = mu_init_agent3_state5/total_belief_agent3_chosen_state2;
+elseif agent3_chosen_state ==3
+   total_belief_agent3_chosen_state3 = mu_init_agent3_state1+...
+        mu_init_agent3_state2 + (mu_init_agent3_state3*exp(-(eta*agent3_fakeloss))) +mu_init_agent3_state4+...
+        +mu_init_agent2_state5; 
+    agent3_belief_update_theta1 = mu_init_agent3_state1/total_belief_agent3_chosen_state3;
+    agent3_belief_update_theta2 = mu_init_agent3_state2/total_belief_agent3_chosen_state3;
+    agent3_belief_update_theta3 = mu_init_agent3_state3* exp(-(eta*agent3_fakeloss))/...
+        total_belief_agent3_chosen_state3;
+    agent3_belief_update_theta4 = mu_init_agent3_state4/total_belief_agent3_chosen_state3;
+    agent3_belief_update_theta5 = mu_init_agent3_state5/total_belief_agent3_chosen_state3;
+  elseif agent3_chosen_state ==4  
+    total_belief_agent3_chosen_state4 = mu_init_agent3_state1+...
+        mu_init_agent3_state2 + mu_init_agent3_state3 +(mu_init_agent3_state4*exp(-(eta*agent3_fakeloss)))+...
+        +mu_init_agent2_state5;
+    agent3_belief_update_theta1 = mu_init_agent3_state1/total_belief_agent3_chosen_state4;
+    agent3_belief_update_theta2 = mu_init_agent3_state2/total_belief_agent3_chosen_state4;
+    agent3_belief_update_theta3 = mu_init_agent3_state3/total_belief_agent3_chosen_state4;
+    agent3_belief_update_theta4 = mu_init_agent3_state4* exp(-(eta*agent3_fakeloss))/...
+        total_belief_agent3_chosen_state4;
+    agent3_belief_update_theta5 = mu_init_agent3_state5/total_belief_agent3_chosen_state4;
+elseif agent3_chosen_state ==5  
+    total_belief_agent3_chosen_state5 = mu_init_agent3_state1+...
+        mu_init_agent3_state2 + mu_init_agent3_state3 +mu_init_agent3_state4+...
+        +(mu_init_agent2_state5*exp(-(eta*agent3_fakeloss)));
+    agent3_belief_update_theta1 = mu_init_agent3_state1/total_belief_agent3_chosen_state5;
+    agent3_belief_update_theta2 = mu_init_agent3_state2/total_belief_agent3_chosen_state5;
+    agent3_belief_update_theta3 = mu_init_agent3_state3/total_belief_agent3_chosen_state5;
+    agent3_belief_update_theta4 = mu_init_agent3_state4/total_belief_agent3_chosen_state5;
+    agent3_belief_update_theta5 = mu_init_agent3_state5*exp(-(eta*agent3_fakeloss))/...
+        total_belief_agent3_chosen_state5;
+end
+
+
+
